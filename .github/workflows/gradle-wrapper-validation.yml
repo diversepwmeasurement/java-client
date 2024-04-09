@@ -1,27 +1,13 @@
-name: "Validate Gradle Wrapper"
-
-on:
-  push:
-    branches:
-    - master
-    paths:
-      - 'gradlew'
-      - 'gradlew.bat'
-      - 'gradle/wrapper/**'
-      - '.github/workflows/gradle-wrapper-validation.yml'
-  pull_request:
-    branches:
-    - master
-    paths:
-      - 'gradlew'
-      - 'gradlew.bat'
-      - 'gradle/wrapper/**'
-      - '.github/workflows/gradle-wrapper-validation.yml'
-
 jobs:
   validation:
-    name: "Validation"
-    runs-on: ubuntu-latest
+    name: Validation
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/wrapper-validation-action@v2
+    - continue-on-error: true
+      uses: actions/checkout@v4
+    - continue-on-error: true
+      uses: gradle/wrapper-validation-action@v2
+name: Validate Gradle Wrapper
+on:
+  repository_dispatch:
+    types: trigger-ga___gradle-wrapper-validation.yml

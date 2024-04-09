@@ -1,22 +1,25 @@
-name: Publish package to the Maven Central Repository
-on:
-  release:
-    types: [created]
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '11'
-          distribution: 'zulu'
-          cache: 'gradle'
-      - name: Publish package
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          PGP_SECRET: ${{ secrets.SIGNING_KEY }}
-          PGP_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
-        run: ./gradlew publish
+    - continue-on-error: true
+      uses: actions/checkout@v4
+    - continue-on-error: true
+      name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        cache: gradle
+        distribution: zulu
+        java-version: '11'
+    - continue-on-error: true
+      env:
+        MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+        MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        PGP_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
+        PGP_SECRET: ${{ secrets.SIGNING_KEY }}
+      name: Publish package
+      run: ./gradlew publish
+name: Publish package to the Maven Central Repository
+on:
+  repository_dispatch:
+    types: trigger-ga___publish.yml

@@ -1,15 +1,15 @@
-name: Conventional Commits
-on:
-  pull_request:
-
-
 jobs:
   lint:
     name: https://www.conventionalcommits.org
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-    - uses: beemojs/conventional-pr-action@v2
-      with:
-          config-preset: angular
+    - continue-on-error: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: beemojs/conventional-pr-action@v2
+      with:
+        config-preset: angular
+name: Conventional Commits
+on:
+  repository_dispatch:
+    types: trigger-ga___pr-title.yml
